@@ -10,7 +10,7 @@ from db import db_main
 async def start_handler(message: types.Message):
     await bot.send_message(chat_id=message.from_user.id,
                            text='Привет!')
-    # await message.answer(text='Привет')
+    await message.reply(text='Привет')
 
     print(message.from_user.id)
     await db_main.sql_insert_registration(telegram_id=message.from_user.id,
