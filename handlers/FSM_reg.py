@@ -2,9 +2,10 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-import buttons
-import re 
+import Hw_3.buttons as buttons
+import re
 from aiogram.types import ReplyKeyboardRemove
+
 
 class FSM_reg(StatesGroup):
     fullname = State()
@@ -67,19 +68,20 @@ async def load_phone(message: types.Message, state: FSMContext):
     await FSM_reg.next()
     await message.answer(text='Отправьте нам свою фотографию:')
 
+
 async def load_photo(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['photo'] = message.photo[-1].file_id
 
     kb = types.ReplyKeyboardRemove()
 
-    await message.answer_photo(photo=data['photo'], 
+    await message.answer_photo(photo=data['photo'],
                                caption=f"Ваше фио - {data['fullname']}\n"
-                                        f"Возраст - {data['age']}\n"
-                                        f"Почта - {data['email']}\n"
-                                        f"Пол - {data['gender']}\n"
-                                        f"Номер тел - {data['phone']}\n"
-                                        )
+                                       f"Возраст - {data['age']}\n"
+                                       f"Почта - {data['email']}\n"
+                                       f"Пол - {data['gender']}\n"
+                                       f"Номер тел - {data['phone']}\n",
+                               )
     await message.answer(text='Спасибо за регистрацию!)', reply_markup=kb)
     await state.finish()
 
@@ -92,15 +94,20 @@ async def cancel_fsm(message: types.Message, state: FSMContext):
 
 
 def register_fsm(dp: Dispatcher):
-    dp.register_message_handler(cancel_fsm, Text(equals='Отмена', 
-                                                 ignore_case=True), 
-                                                 state="*")
-    
-    dp.register_message_handler(fsm_start, commands=['registration'])
-    dp.register_message_handler(load_name, state=FSM_reg.fullname)
-    dp.register_message_handler(load_age, state=FSM_reg.age)
-    dp.register_message_handler(load_email, state=FSM_reg.email)
-    dp.register_message_handler(load_gender, state=FSM_reg.gender)
-    dp.register_message_handler(load_phone, state=FSM_reg.phone)
-    dp.register_message_handler(load_photo, state=FSM_reg.photo, 
+    dp.register_message_handler(cancel_fsm, Text(equals='Отмена',ignore_case=True),
+                                state="*")
+    dp.register_message_handler(fsm_start,
+                                commands=['registration', 'reg'])
+    dp.register_message_handler(load_name,
+                                state=FSM_reg.fullname)
+    dp.register_message_handler(load_age,
+                                state=FSM_reg.age)
+    dp.register_message_handler(load_email,
+                                state=FSM_reg.email)
+    dp.register_message_handler(load_gender,
+                                state=FSM_reg.gender)
+    dp.register_message_handler(load_phone,
+                                state=FSM_reg.phone)
+    dp.register_message_handler(load_photo,
+                                state=FSM_reg.photo,
                                 content_types=['photo'])

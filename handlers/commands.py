@@ -18,7 +18,7 @@ async def start_handler(message: types.Message):
 
 
 async def info_handler(message: types.Message):
-    await message.answer("Бот для группы 44-2 Backend")
+    await message.answer("Бот для группы Hw_3 Backend")
 
 
 async def mem_handler(message: types.Message):

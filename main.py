@@ -1,15 +1,17 @@
 import logging
 from config import dp, bot
 from aiogram.utils import executor
-from handlers import commands, echo, quiz, FSM_reg
+from handlers import commands, echo, quiz, FSM_reg,FSM_store
 from db import db_main
 from aiogram import types
 
-admin = [995712956, ]
+admin = [5946477688, ]
+
 
 async def on_startup(_):
+    kb = types.ReplyKeyboardRemove()
     for i in admin:
-        await bot.send_message(chat_id=i, text='Бот включен!')
+        await bot.send_message(chat_id=i, text='Бот включен!', reply_markup=kb)
         await db_main.sql_create()
 
 
@@ -20,8 +22,10 @@ async def on_shutdown(_):
 commands.register_commands(dp)
 quiz.register_quiz(dp)
 FSM_reg.register_fsm(dp)
-
+FSM_store.register_fsm_store(dp)
 echo.register_echo(dp)
+
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
