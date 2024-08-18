@@ -11,6 +11,7 @@ class FSM_store(StatesGroup):
     size_product = State()
     price_product = State()
     id_product = State()
+    collection_product = State()
     category_product = State()
     info_product = State()
     photo_product = State()
@@ -52,6 +53,14 @@ async def load_id_product(message: types.Message, state: FSMContext):
         data_store['id_product'] = message.text
     
     await FSM_store.next()
+    await message.answer(text='Введите коллекцию товара:')
+
+
+async def load_collection_product(message: types.Message, state: FSMContext):
+    async with state.proxy() as data_store:
+        data_store['collection_product'] = message.text
+
+    await FSM_store.next()
     await message.answer(text='Напишите категорию товара:')
 
 
@@ -79,6 +88,7 @@ async def load_photo(message: types.Message, state: FSMContext):
                                caption=f"Название товара - {data_store['name_product']}\n"
                                        f"Информация о товаре - {data_store['info_product']}\n"
                                        f"Категория - {data_store['category_product']}\n"
+                                       f"коллекция - {data_store['collection_product']}\n"
                                        f"Размер - {data_store['size_product']}\n"
                                        f"Цена - {data_store['price_product']}\n"
                                        f"Артикул - {data_store['id_product']}",
@@ -105,6 +115,10 @@ async def submit(message: types.Message, state: FSMContext):
                 info_product=data_store['info_product'],
                 id_product=data_store['id_product']
             )
+            await db_main.sql_insert_products_collection(
+                collection_product=data_store['collection_product'],
+                id_product=data_store['id_product']
+            )
 
         await message.answer(text='Ваши данные сохранены!', reply_markup=kb)
         await state.finish()
@@ -124,12 +138,12 @@ def store_fsm(dp: Dispatcher):
     dp.register_message_handler(cancel_fsm, Text(equals='Отмена', 
                                                  ignore_case=True), 
                                                  state="*")
-    
     dp.register_message_handler(fsm_start, commands=['product'])
     dp.register_message_handler(load_name_product, state=FSM_store.name_product)
     dp.register_message_handler(load_size_product, state=FSM_store.size_product)
     dp.register_message_handler(load_price_product, state=FSM_store.price_product)
     dp.register_message_handler(load_id_product, state=FSM_store.id_product)
+    dp.register_message_handler(load_collection_product, state=FSM_store.collection_product)
     dp.register_message_handler(load_category_product, state=FSM_store.category_product)
     dp.register_message_handler(load_info_product, state=FSM_store.info_product)
     dp.register_message_handler(load_photo, state=FSM_store.photo_product, content_types=['photo'])
