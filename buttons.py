@@ -5,5 +5,20 @@ cancel = ReplyKeyboardMarkup(resize_keyboard=True).add(
 )
 
 submit_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(
-    KeyboardButton('Да'), KeyboardButton('Нет')
+    KeyboardButton('Да'),
+    KeyboardButton('Нет')
+)
+
+
+product_size_button = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton('S'),
+    KeyboardButton('M'),
+    KeyboardButton('L'),
+    KeyboardButton('XL'),
+    KeyboardButton('3XL')
+)
+
+yes_no = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton('Yes'),
+    KeyboardButton('No')
 )

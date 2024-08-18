@@ -36,6 +36,7 @@ async def quiz(message: types.Message):
         reply_markup=button_quiz
     )
 
+
 async def quiz_2(call: types.CallbackQuery):
     button_quiz = InlineKeyboardMarkup()
     button_quiz.add(InlineKeyboardButton("Дальше!",
