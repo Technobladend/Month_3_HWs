@@ -10,7 +10,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime
 # Импортируем стандартный модуль datetime, который используется для работы с датой и временем 
 
-from config import bot
+from HW_4.config import bot
 
 from apscheduler.triggers.cron import CronTrigger
 # Импортирует CronTrigger, который используется для задания расписания запуска задач по CRON выражению.
@@ -21,7 +21,7 @@ from aiogram.dispatcher import FSMContext
 import random 
 
 
-users = [995712956, ]
+users = [5946477688, ]
 # Определяет список users, который содержит telegram id пользователя, для отправки уведомлений, В данном случае в список включен один пользователь 
 
 notification = []

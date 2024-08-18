@@ -1,15 +1,16 @@
 import logging
 from config import dp, bot
 from aiogram.utils import executor
-from handlers import commands, echo, quiz, FSM_reg, FSM_online_store, notification, send_products
+from handlers import commands, echo, quiz, FSM_reg, FSM_online_store, send_products
 from db import db_main
 from aiogram import types
 
-admin = [995712956, ]
+admin = [5946477688, ]
+
 
 async def on_startup(_):
     for i in admin:
-        await notification.set_scheduler()
+        # await notification.set_scheduler()
         await bot.send_message(chat_id=i, text='Бот включен!')
         await db_main.sql_create()
 
@@ -22,7 +23,7 @@ commands.register_commands(dp)
 quiz.register_quiz(dp)
 FSM_reg.register_fsm(dp)
 FSM_online_store.store_fsm(dp)
-notification.register_notification(dp)
+# notification.register_notification(dp)
 send_products.register_send_products_handler(dp)
 
 echo.register_echo(dp)

@@ -2,7 +2,7 @@ import sqlite3
 from aiogram import types, Dispatcher
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.dispatcher.filters import Text
-import buttons
+import HW_4.buttons as buttons
 
 
 def get_db_connection():
