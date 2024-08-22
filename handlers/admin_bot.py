@@ -1,7 +1,8 @@
 from aiogram import types, Dispatcher
-from config import admin, bot
+from HW_6.config import admin, bot
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import logging
+
 
 async def welcome_user(message: types.Message):
     for member in message.new_chat_members:
@@ -11,7 +12,9 @@ async def welcome_user(message: types.Message):
                              f"* Не материться\n"
                              f"* Обсуждение политических тем\n")
 
+
 words = ['дурак', 'дебил', 'кретин', 'даун', 'амеба', 'израиль', 'украина', 'россия']
+
 
 async def filter_word(message: types.Message):
     message_text = message.text.lower()
@@ -35,7 +38,7 @@ async def delete_user_handler(message: types.Message):
             await message.answer(f'Вы действительно хотите удалить {user_name} ?',
                                  reply_markup=InlineKeyboardMarkup().add(
                                      InlineKeyboardButton(f'Удалить',
-                                     callback_data=f'delete_user {user_id}')))
+                                                          callback_data=f'delete_user {user_id}')))
 
     else:
         await message.answer('Эта команда должна быть использована в группе')
@@ -50,10 +53,31 @@ async def complete_delete_user(call: types.CallbackQuery):
 
         await call.answer(text='Пользователь удален!', show_alert=True)
 
-        await bot.delete_messages(call.message.chat.id, call.message_id)
+        await bot.delete_messages(call.message.chat.id, call.message.message_id)
     except Exception as e:
         logging.error(f'Error in complete_delete_user: {e}')
         await call.answer(text='Не удалось удалить пользователя', show_alert=True)
+
+
+async def pin_message(message: types.Message):
+    if message.reply_to_message:
+        await bot.pin_chat_message(chat_id=message.chat.id, message_id=message.reply_to_message.message_id)
+        await message.answer("Сообщение закреплено!")
+    else:
+        await message.answer("Команду нужно использовать в ответ на сообщение.")
+
+
+async def unpin_message(message: types.Message):
+    if message.reply_to_message:
+        try:
+            # Открепляем сообщение, на которое ответили
+            await bot.unpin_chat_message(chat_id=message.chat.id, message_id=message.reply_to_message.message_id)
+            await message.answer("Сообщение откреплено!")
+        except Exception as e:
+            await message.answer(f"Не удалось открепить сообщение: {e}")
+    else:
+        await message.answer("Команду нужно использовать в ответ на закрепленное сообщение.")
+
 
 
 def register_admin(dp: Dispatcher):
@@ -63,4 +87,6 @@ def register_admin(dp: Dispatcher):
     dp.register_callback_query_handler(complete_delete_user,
                                        lambda call: call.data and call.data.startswith('delete_user '))
 
+    dp.register_message_handler(pin_message, lambda message: message.text == '!pin')
+    dp.register_message_handler(unpin_message, lambda message: message.text == '!unpin')
     dp.register_message_handler(filter_word)

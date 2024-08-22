@@ -1,9 +1,9 @@
 from aiogram import types, Dispatcher
-from config import bot
+from HW_6.config import bot
 import os
 from aiogram.types import InputFile
 import random
-from db import db_main
+from HW_6.db import db_main
 
 
 # @dp.message_handler(commands=['start'])

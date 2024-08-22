@@ -1,5 +1,5 @@
 import sqlite3
-from db import queries
+from HW_6.db import queries
 
 db = sqlite3.connect('db/db.sqlite3')
 cursor = db.cursor()
