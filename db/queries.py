@@ -1,3 +1,4 @@
+
 CREATE_TABLE_REGISTRATION = """
     CREATE TABLE IF NOT EXISTS registration
     (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,4 +42,20 @@ CREATE_TABLE_PRODUCTS_DETAILS = """
 INSERT_PRODUCTS_DETAILS = """
     INSERT INTO products_details(category, info_product, id_product)
     VALUES (?, ?, ?)
+"""
+
+
+CREATE_TABLE_PRODUCTS_COLLECTION = '''
+    CREATE TABLE IF NOT EXISTS products_collection
+    (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_product VARCHAR(255),
+    collection_product VARCHAR(255)
+    )
+'''
+
+
+INSERT_PRODUCTS_COLLECTION = """
+    INSERT INTO products_collection(collection_product, id_product)
+    VALUES (?, ?)
 """
